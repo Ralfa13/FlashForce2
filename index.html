@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashForce_games</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #4CAF50;
+        }
+
+        .game-link {
+            display: block;
+            margin: 15px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .game-link:hover {
+            background-color: #45a049;
+        }
+
+        .game-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to Flashforce Games!</h1>
+    <p>Click a game to play:</p>
+
+    <div class="game-list">
+        <a href=".tetris.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        canvas { background: black; }
+    </style>
+</head>
+<body>
+    <h1>Tetris</h1>
+    <canvas id="gameCanvas" width="200" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const rows = 20, cols = 10, tileSize = 20;
+        let board = Array.from({ length: rows }, () => Array(cols).fill(0));
+
+        function drawBoard() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            board.forEach((row, r) => row.forEach((tile, c) => {
+                if (tile) ctx.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
+            }));
+        }
+
+        function gameLoop() {
+            drawBoard();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>">.tetris 1</a>
+        <a href="20.48.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        .grid { display: grid; grid-template-columns: repeat(4, 100px); gap: 5px; width: 420px; margin: auto; }
+        .tile { width: 100px; height: 100px; background: lightgray; display: flex; align-items: center; justify-content: center; font-size: 2em; }
+    </style>
+</head>
+<body>
+    <h1>2048</h1>
+    <div class="grid"></div>
+    <script>
+        let board = Array(16).fill(0);
+        let grid = document.querySelector(".grid");
+
+        function drawBoard() {
+            grid.innerHTML = "";
+            board.forEach(value => {
+                let tile = document.createElement("div");
+                tile.className = "tile";
+                tile.textContent = value ? value : "";
+                grid.appendChild(tile);
+            });
+        }
+
+        function addRandomTile() {
+            let empty = board.map((v, i) => v === 0 ? i : null).filter(v => v !== null);
+            if (empty.length) board[empty[Math.floor(Math.random() * empty.length)]] = 2;
+        }
+
+        function slideLeft() {
+            for (let i = 0; i < 16; i += 4) {
+                let row = board.slice(i, i + 4).filter(v => v);
+                while (row.length < 4) row.push(0);
+                for (let j = 0; j < 3; j++) {
+                    if (row[j] === row[j + 1]) {
+                        row[j] *= 2;
+                        row[j + 1] = 0;
+                    }
+                }
+                row = row.filter(v => v);
+                while (row.length < 4) row.push(0);
+                board.splice(i, 4, ...row);
+            }
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft") {
+                slideLeft();
+                addRandomTile();
+                drawBoard();
+            }
+        });
+
+        addRandomTile();
+        addRandomTile();
+        drawBoard();
+    </script>
+</body>
+</html>">Game 5</a>
+        <a href="Breakout.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breakout</title>
+    <style>
+        body { text-align: center; }
+        canvas { background: black; }
+    </style>
+</head>
+<body>
+    <h1>Breakout</h1>
+    <canvas id="gameCanvas" width="400" height="300"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let paddle = { x: 160, width: 80, height: 10 };
+        let ball = { x: 200, y: 150, dx: 2, dy: -2, radius: 5 };
+        let bricks = [];
+        let rows = 3, cols = 5, brickWidth = 60, brickHeight = 20, padding = 10;
+
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                bricks.push({ x: c * (brickWidth + padding) + 30, y: r * (brickHeight + padding) + 30, hit: false });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.fillRect(paddle.x, canvas.height - paddle.height, paddle.width, paddle.height);
+
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            bricks.forEach(brick => {
+                if (!brick.hit) {
+                    ctx.fillRect(brick.x, brick.y, brickWidth, brickHeight);
+                }
+            });
+        }
+
+        function update() {
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            if (ball.x < 0 || ball.x > canvas.width) ball.dx *= -1;
+            if (ball.y < 0) ball.dy *= -1;
+
+            if (ball.y > canvas.height - paddle.height && ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
+                ball.dy *= -1;
+            }
+
+            bricks.forEach(brick => {
+                if (!brick.hit && ball.x > brick.x && ball.x < brick.x + brickWidth && ball.y > brick.y && ball.y < brick.y + brickHeight) {
+                    brick.hit = true;
+                    ball.dy *= -1;
+                }
+            });
+
+            if (ball.y > canvas.height) {
+                alert("Game Over!");
+                document.location.reload();
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener("mousemove", (e) => {
+            let rect = canvas.getBoundingClientRect();
+            paddle.x = e.clientX - rect.left - paddle.width / 2;
+        });
+
+        gameLoop();
+    </script>
+</body>
+</html>">Breakout 6</a>
+        <a href="Click_it.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Game</title>
+</head>
+<body>
+    <h1>Clicker Game</h1>
+    <p>Score: <span id="score">0</span></p>
+    <button onclick="increaseScore()">Click Me!</button>
+    <script>
+        let score = 0;
+        function increaseScore() {
+            score++;
+            document.getElementById("score").innerText = score;
+        }
+    </script>
+</body>
+</html>">Click it 7</a>
+        <a href="Fishing_game.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fishing Game</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        canvas { background: lightblue; display: block; margin: auto; }
+    </style>
+</head>
+<body>
+    <h1>Fishing Game</h1>
+    <canvas id="gameCanvas" width="400" height="300"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let hook = { x: 180, y: 250, width: 10, height: 20 };
+        let fish = { x: Math.random() * 350, y: Math.random() * 200, width: 30, height: 20 };
+        let score = 0;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "black";
+            ctx.fillRect(hook.x, hook.y, hook.width, hook.height);
+            ctx.fillStyle = "orange";
+            ctx.fillRect(fish.x, fish.y, fish.width, fish.height);
+            ctx.fillStyle = "white";
+            ctx.fillText("Score: " + score, 10, 20);
+        }
+
+        function update() {
+            if (hook.x < fish.x + fish.width && hook.x + hook.width > fish.x &&
+                hook.y < fish.y + fish.height && hook.y + hook.height > fish.y) {
+                score++;
+                fish.x = Math.random() * 350;
+                fish.y = Math.random() * 200;
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft") hook.x -= 10;
+            if (e.key === "ArrowRight") hook.x += 10;
+        });
+
+        gameLoop();
+    </script>
+</body>
+</html>">Fishing game 8</a>
+        <a href="Flippy_bird" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flippy Bird</title>
+    <style>
+        body { text-align: center; }
+        canvas { background: skyblue; }
+    </style>
+</head>
+<body>
+    <h1>Flippy Bird</h1>
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let bird = { x: 50, y: 250, width: 20, height: 20, gravity: 0.5, velocity: 0 };
+        let pipes = [];
+        let gameOver = false;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "yellow";
+            ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
+
+            ctx.fillStyle = "green";
+            pipes.forEach(pipe => {
+                ctx.fillRect(pipe.x, 0, pipe.width, pipe.top);
+                ctx.fillRect(pipe.x, canvas.height - pipe.bottom, pipe.width, pipe.bottom);
+            });
+        }
+
+        function update() {
+            if (gameOver) return;
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+
+            pipes.forEach(pipe => {
+                pipe.x -= 2;
+                if (pipe.x < -pipe.width) {
+                    pipe.x = canvas.width;
+                    pipe.top = Math.random() * 200 + 50;
+                    pipe.bottom = canvas.height - pipe.top - 150;
+                }
+                if (bird.x < pipe.x + pipe.width && bird.x + bird.width > pipe.x &&
+                    (bird.y < pipe.top || bird.y + bird.height > canvas.height - pipe.bottom)) {
+                    gameOver = true;
+                    alert("Game Over!");
+                }
+            });
+
+            if (bird.y + bird.height > canvas.height) gameOver = true;
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener("keydown", () => bird.velocity = -8);
+        pipes.push({ x: 300, width: 50, top: 100, bottom: 150 });
+
+        gameLoop();
+    </script>
+</body>
+</html>">Flippy bird 9</a>
+        <a href="Guess_the_word.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess_the_word</title>
+</head>
+<body>
+    <h1>Guess the Word</h1>
+    <p>Hint: A big animal with a trunk</p>
+    <input type="text" id="guess">
+    <button onclick="checkWord()">Submit</button>
+    <p id="result"></p>
+    <script>
+        function checkWord() {
+            let guess = document.getElementById("guess").value.toLowerCase();
+            document.getElementById("result").innerText = guess === "elephant" ? "Correct!" : "Try again!";
+        }
+    </script>
+</body>
+</html>">Guess the word 10</a>
+        <a href="jumping_game.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game</title>
+</head>
+<body>
+    <h1>Quiz Game</h1>
+    <p id="question">What is the capital of France?</p>
+    <button onclick="checkAnswer('Paris')">Paris</button>
+    <button onclick="checkAnswer('Rome')">Rome</button>
+    <button onclick="checkAnswer('Berlin')">Berlin</button>
+    <button onclick="checkAnswer('Madrid')">Madrid</button>
+    <p id="result"></p>
+    <script>
+        function checkAnswer(answer) {
+            document.getElementById("result").innerText = (answer === "Paris") ? "Correct!" : "Wrong, try again!";
+        }
+    </script>
+</body>
+</html>">jumping game 11</a>
+        <a href="Maze.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Game</title>
+    <style>
+        canvas { background: white; display: block; margin: auto; }
+    </style>
+</head>
+<body>
+    <h1>Maze Game</h1>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let player = { x: 10, y: 10, size: 20 };
+        let finish = { x: 350, y: 350, size: 20 };
+        let walls = [{ x: 100, y: 0, width: 20, height: 300 }, { x: 200, y: 100, width: 200, height: 20 }];
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "blue";
+            ctx.fillRect(player.x, player.y, player.size, player.size);
+            ctx.fillStyle = "green";
+            ctx.fillRect(finish.x, finish.y, finish.size, finish.size);
+            ctx.fillStyle = "black";
+            walls.forEach(w => ctx.fillRect(w.x, w.y, w.width, w.height));
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowUp") player.y -= 10;
+            if (e.key === "ArrowDown") player.y += 10;
+            if (e.key === "ArrowLeft") player.x -= 10;
+            if (e.key === "ArrowRight") player.x += 10;
+            if (player.x >= finish.x && player.y >= finish.y) alert("You win!");
+            draw();
+        });
+
+        draw();
+    </script>
+</body>
+</html>">Maze 12</a>
+        <a href="Memory_game.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        .grid { display: grid; grid-template-columns: repeat(4, 100px); gap: 10px; justify-content: center; }
+        .card { width: 100px; height: 100px; background: gray; display: flex; align-items: center; justify-content: center; font-size: 2em; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Memory Game</h1>
+    <div class="grid"></div>
+    <script>
+        const emojis = ["🍎", "🍌", "🍒", "🍇", "🍎", "🍌", "🍒", "🍇"];
+        let shuffled = emojis.sort(() => 0.5 - Math.random());
+        let grid = document.querySelector(".grid");
+        let selected = [];
+        let matched = [];
+
+        shuffled.forEach((emoji, index) => {
+            let card = document.createElement("div");
+            card.className = "card";
+            card.dataset.index = index;
+            card.onclick = () => flipCard(card, emoji);
+            grid.appendChild(card);
+        });
+
+        function flipCard(card, emoji) {
+            if (selected.length < 2 && !matched.includes(card)) {
+                card.textContent = emoji;
+                selected.push({ card, emoji });
+            }
+            if (selected.length === 2) {
+                setTimeout(checkMatch, 500);
+            }
+        }
+
+        function checkMatch() {
+            if (selected[0].emoji === selected[1].emoji) {
+                matched.push(selected[0].card, selected[1].card);
+            } else {
+                selected[0].card.textContent = "";
+                selected[1].card.textContent = "";
+            }
+            selected = [];
+        }
+    </script>
+</body>
+</html>">Memory game 13</a>
+        <a href="Obstacle_dodge.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obstacle Dodge</title>
+    <style>
+        canvas { background: lightblue; display: block; margin: auto; }
+    </style>
+</head>
+<body>
+    <h1>Obstacle Dodge</h1>
+    <canvas id="gameCanvas" width="400" height="300"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let player = { x: 180, y: 270, width: 20, height: 20 };
+        let obstacles = [{ x: Math.random() * 380, y: 0, width: 20, height: 20 }];
+        let speed = 3;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "blue";
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            ctx.fillStyle = "red";
+            obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.width, o.height));
+        }
+
+        function update() {
+            obstacles.forEach(o => {
+                o.y += speed;
+                if (o.y > canvas.height) {
+                    o.y = 0;
+                    o.x = Math.random() * 380;
+                }
+                if (player.x < o.x + o.width && player.x + player.width > o.x &&
+                    player.y < o.y + o.height && player.y + player.height > o.y) {
+                    alert("Game Over!");
+                    document.location.reload();
+                }
+            });
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft") player.x -= 10;
+            if (e.key === "ArrowRight") player.x += 10;
+        });
+
+        gameLoop();
+    </script>
+</body>
+</html>">Obstacle_dodge 14</a>
+        <a href="Online_shooter.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oline.shooter</title>
+    <style> canvas { background: black; display: block; margin: auto; } </style>
+</head>
+<body>
+    <h1>online_shooter</h1>
+    <canvas id="gameCanvas" width="400" height="300"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let target = { x: Math.random() * 350, y: Math.random() * 250, width: 30, height: 30 };
+        let score = 0;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "red";
+            ctx.fillRect(target.x, target.y, target.width, target.height);
+            ctx.fillStyle = "white";
+            ctx.fillText("Score: " + score, 10, 20);
+        }
+
+        canvas.addEventListener("click", (e) => {
+            let rect = canvas.getBoundingClientRect();
+            let x = e.clientX - rect.left, y = e.clientY - rect.top;
+            if (x > target.x && x < target.x + target.width && y > target.y && y < target.y + target.height) {
+                score++;
+                target.x = Math.random() * 350;
+                target.y = Math.random() * 250;
+            }
+        });
+
+        function gameLoop() {
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>">Online shooter 15</a>
+        <a href="Platformer.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platformer</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        canvas { background: skyblue; display: block; margin: auto; }
+    </style>
+</head>
+<body>
+    <h1>Platformer</h1>
+    <canvas id="gameCanvas" width="400" height="300"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let player = { x: 50, y: 200, width: 20, height: 20, velocityY: 0, gravity: 0.5 };
+        let platforms = [{ x: 50, y: 250, width: 100, height: 10 }, { x: 200, y: 200, width: 100, height: 10 }];
+        let onGround = false;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "blue";
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            ctx.fillStyle = "green";
+            platforms.forEach(p => ctx.fillRect(p.x, p.y, p.width, p.height));
+        }
+
+        function update() {
+            player.velocityY += player.gravity;
+            player.y += player.velocityY;
+            onGround = false;
+
+            platforms.forEach(p => {
+                if (player.y + player.height > p.y && player.y + player.height - player.velocityY <= p.y &&
+                    player.x + player.width > p.x && player.x < p.x + p.width) {
+                    player.y = p.y - player.height;
+                    player.velocityY = 0;
+                    onGround = true;
+                }
+            });
+
+            if (player.y > canvas.height) {
+                alert("Game Over!");
+                document.location.reload();
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowUp" && onGround) player.velocityY = -10;
+            if (e.key === "ArrowLeft") player.x -= 10;
+            if (e.key === "ArrowRight") player.x += 10;
+        });
+
+        gameLoop();
+    </script>
+</body>
+</html>">Plaformer 16</a>
+        <a href="Quiz.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+</head>
+<body>
+    <h1>Quiz</h1>
+    <p id="question">What is the capital of France?</p>
+    <button onclick="checkAnswer('Paris')">Paris</button>
+    <button onclick="checkAnswer('Rome')">Rome</button>
+    <button onclick="checkAnswer('Berlin')">Berlin</button>
+    <button onclick="checkAnswer('Madrid')">Madrid</button>
+    <p id="result"></p>
+    <script>
+        function checkAnswer(answer) {
+            document.getElementById("result").innerText = (answer === "Paris") ? "Correct!" : "Wrong, try again!";
+        }
+    </script>
+</body>
+</html>">Quiz 17</a>
+        <a href="Racing_game.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Racing</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        canvas { background: gray; display: block; margin: auto; }
+    </style>
+</head>
+<body>
+    <h1>Car Racing</h1>
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let car = { x: 180, y: 400, width: 40, height: 60 };
+        let obstacles = [{ x: Math.random() * 360, y: 0, width: 40, height: 60 }];
+        let speed = 3;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "red";
+            ctx.fillRect(car.x, car.y, car.width, car.height);
+
+            ctx.fillStyle = "black";
+            obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.width, o.height));
+        }
+
+        function update() {
+            obstacles.forEach(o => {
+                o.y += speed;
+                if (o.y > canvas.height) {
+                    o.y = 0;
+                    o.x = Math.random() * 360;
+                }
+                if (car.x < o.x + o.width && car.x + car.width > o.x && car.y < o.y + o.height && car.y + car.height > o.y) {
+                    alert("Game Over!");
+                    document.location.reload();
+                }
+            });
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft") car.x -= 10;
+            if (e.key === "ArrowRight") car.x += 10;
+        });
+
+        gameLoop();
+    </script>
+</body>
+</html>">Racing game 18</a>
+        <a href="Rock_paper_scissors.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+</head>
+<body>
+    <h1>Rock Paper Scissors</h1>
+    <button onclick="play('rock')">Rock</button>
+    <button onclick="play('paper')">Paper</button>
+    <button onclick="play('scissors')">Scissors</button>
+    <p id="result"></p>
+    <script>
+        function play(playerChoice) {
+            let choices = ["rock", "paper", "scissors"];
+            let computerChoice = choices[Math.floor(Math.random() * 3)];
+            let result = (playerChoice === computerChoice) ? "It's a tie!" :
+                        (playerChoice === "rock" && computerChoice === "scissors" ||
+                        playerChoice === "paper" && computerChoice === "rock" ||
+                        playerChoice === "scissors" && computerChoice === "paper") ? "You win!" : "You lose!";
+            document.getElementById("result").innerText = `Computer chose ${computerChoice}. ${result}`;
+        }
+    </script>
+</body>
+</html>">Rock paper scissors 19</a>
+        <a href="Snake.html" class="<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake</title>
+    <style>
+        body { text-align: center; }
+        canvas { background: black; }
+    </style>
+</head>
+<body>
+    <h1>Snake</h1>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let snake = [{ x: 10, y: 10 }];
+        let food = { x: 15, y: 15 };
+        let direction = { x: 1, y: 0 };
+        let gridSize = 20;
+        let gameOver = false;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "green";
+            snake.forEach(segment => ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize, gridSize));
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
+        }
+
+        function update() {
+            if (gameOver) return;
+            let head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+
+            if (head.x === food.x && head.y === food.y) {
+                food = { x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20) };
+            } else {
+                snake.pop();
+            }
+
+            if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 || snake.some(s => s.x === head.x && s.y === head.y)) {
+                gameOver = true;
+                alert("Game Over!");
+                return;
+            }
+
+            snake.unshift(head);
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            setTimeout(gameLoop, 100);
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowUp" && direction.y === 0) direction = { x: 0, y: -1 };
+            if (e.key === "ArrowDown" && direction.y === 0) direction = { x: 0, y: 1 };
+            if (e.key === "ArrowLeft" && direction.x === 0) direction = { x: -1, y: 0 };
+            if (e.key === "ArrowRight" && direction.x === 0) direction = { x: 1, y: 0 };
+        });
+
+        gameLoop();
+    </script>
+</body>
+</html>">Snake 20</a>
+ <a href="Space_invaders.html" class="<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Invaders</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        canvas { background: black; }
+    </style>
+</head>
+<body>
+    <h1>Space Invaders</h1>
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let player = { x: 180, y: 450, width: 40, height: 10 };
+        let bullets = [];
+        let enemies = Array.from({ length: 10 }, (_, i) => ({ x: i * 40, y: 50, width: 30, height: 10 }));
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            bullets.forEach(b => ctx.fillRect(b.x, b.y, 5, 10));
+            enemies.forEach(e => ctx.fillRect(e.x, e.y, e.width, e.height));
+        }
+
+        function update() {
+            bullets.forEach(b => b.y -= 5);
+            bullets = bullets.filter(b => b.y > 0);
+
+            enemies.forEach((e, i) => {
+                bullets.forEach((b, j) => {
+                    if (b.x > e.x && b.x < e.x + e.width && b.y > e.y && b.y < e.y + e.height) {
+                        enemies.splice(i, 1);
+                        bullets.splice(j, 1);
+                    }
+                });
+            });
+
+            if (enemies.length === 0) alert("You Win!");
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft") player.x -= 10;
+            if (e.key === "ArrowRight") player.x += 10;
+            if (e.key === " ") bullets.push({ x: player.x + player.width / 2, y: player.y });
+        });
+
+        gameLoop();
+    </script>
+</body>
+</html>">Space invadors 21</a>
+</div>
+
+</body>
+</html>
