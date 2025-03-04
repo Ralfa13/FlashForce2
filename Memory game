@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        .grid { display: grid; grid-template-columns: repeat(4, 100px); gap: 10px; justify-content: center; }
+        .card { width: 100px; height: 100px; background: gray; display: flex; align-items: center; justify-content: center; font-size: 2em; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Memory Game</h1>
+    <div class="grid"></div>
+    <script>
+        const emojis = ["🍎", "🍌", "🍒", "🍇", "🍎", "🍌", "🍒", "🍇"];
+        let shuffled = emojis.sort(() => 0.5 - Math.random());
+        let grid = document.querySelector(".grid");
+        let selected = [];
+        let matched = [];
+
+        shuffled.forEach((emoji, index) => {
+            let card = document.createElement("div");
+            card.className = "card";
+            card.dataset.index = index;
+            card.onclick = () => flipCard(card, emoji);
+            grid.appendChild(card);
+        });
+
+        function flipCard(card, emoji) {
+            if (selected.length < 2 && !matched.includes(card)) {
+                card.textContent = emoji;
+                selected.push({ card, emoji });
+            }
+            if (selected.length === 2) {
+                setTimeout(checkMatch, 500);
+            }
+        }
+
+        function checkMatch() {
+            if (selected[0].emoji === selected[1].emoji) {
+                matched.push(selected[0].card, selected[1].card);
+            } else {
+                selected[0].card.textContent = "";
+                selected[1].card.textContent = "";
+            }
+            selected = [];
+        }
+    </script>
+</body>
+</html>
