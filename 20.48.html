@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        .grid { display: grid; grid-template-columns: repeat(4, 100px); gap: 5px; width: 420px; margin: auto; }
+        .tile { width: 100px; height: 100px; background: lightgray; display: flex; align-items: center; justify-content: center; font-size: 2em; }
+    </style>
+</head>
+<body>
+    <h1>2048</h1>
+    <div class="grid"></div>
+    <script>
+        let board = Array(16).fill(0);
+        let grid = document.querySelector(".grid");
+
+        function drawBoard() {
+            grid.innerHTML = "";
+            board.forEach(value => {
+                let tile = document.createElement("div");
+                tile.className = "tile";
+                tile.textContent = value ? value : "";
+                grid.appendChild(tile);
+            });
+        }
+
+        function addRandomTile() {
+            let empty = board.map((v, i) => v === 0 ? i : null).filter(v => v !== null);
+            if (empty.length) board[empty[Math.floor(Math.random() * empty.length)]] = 2;
+        }
+
+        function slideLeft() {
+            for (let i = 0; i < 16; i += 4) {
+                let row = board.slice(i, i + 4).filter(v => v);
+                while (row.length < 4) row.push(0);
+                for (let j = 0; j < 3; j++) {
+                    if (row[j] === row[j + 1]) {
+                        row[j] *= 2;
+                        row[j + 1] = 0;
+                    }
+                }
+                row = row.filter(v => v);
+                while (row.length < 4) row.push(0);
+                board.splice(i, 4, ...row);
+            }
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft") {
+                slideLeft();
+                addRandomTile();
+                drawBoard();
+            }
+        });
+
+        addRandomTile();
+        addRandomTile();
+        drawBoard();
+    </script>
+</body>
+</html>
