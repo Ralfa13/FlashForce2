@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Game</title>
+    <style>
+        canvas { background: white; display: block; margin: auto; }
+    </style>
+</head>
+<body>
+    <h1>Maze Game</h1>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let player = { x: 10, y: 10, size: 20 };
+        let finish = { x: 350, y: 350, size: 20 };
+        let walls = [{ x: 100, y: 0, width: 20, height: 300 }, { x: 200, y: 100, width: 200, height: 20 }];
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "blue";
+            ctx.fillRect(player.x, player.y, player.size, player.size);
+            ctx.fillStyle = "green";
+            ctx.fillRect(finish.x, finish.y, finish.size, finish.size);
+            ctx.fillStyle = "black";
+            walls.forEach(w => ctx.fillRect(w.x, w.y, w.width, w.height));
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowUp") player.y -= 10;
+            if (e.key === "ArrowDown") player.y += 10;
+            if (e.key === "ArrowLeft") player.x -= 10;
+            if (e.key === "ArrowRight") player.x += 10;
+            if (player.x >= finish.x && player.y >= finish.y) alert("You win!");
+            draw();
+        });
+
+        draw();
+    </script>
+</body>
+</html>
