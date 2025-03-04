@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        canvas { background: black; }
+    </style>
+</head>
+<body>
+    <h1>Tetris</h1>
+    <canvas id="gameCanvas" width="200" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const rows = 20, cols = 10, tileSize = 20;
+        let board = Array.from({ length: rows }, () => Array(cols).fill(0));
+
+        function drawBoard() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            board.forEach((row, r) => row.forEach((tile, c) => {
+                if (tile) ctx.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
+            }));
+        }
+
+        function gameLoop() {
+            drawBoard();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
